@@ -3,6 +3,7 @@ from .models import User
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from .utils import Util
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -73,8 +74,17 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
             user = User.objects.get(email=email)
             user_id = urlsafe_base64_encode(force_bytes(user.id))
             token = PasswordResetTokenGenerator().make_token(user=user)
-            link = 'http://localhost:3000/api/user/reset/'+user_id+'/'+token
-            print(link)
+            link = 'http://127.0.0.1:8000/api/user/reset-password/'+user_id+'/'+token+'/'
+
+
+            # Send mail
+            body = 'Click the following link to reset your password \n'+link
+            data = {
+                'email_subject':'Reset Your Password',
+                'body':body,
+                'to_mail':user.email
+            }
+            Util.send_mail(data=data)
             return attrs
         else:
             raise serializers.ValidationError("You are not a registered User")
@@ -94,6 +104,7 @@ class UserPasswordResetSerializer(serializers.Serializer):
 
             if password != password2:
                 raise serializers.ValidationError("Password and Confirm Password don't match")
+            
             id = smart_str(urlsafe_base64_decode(uid))
             user = User.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
