@@ -103,6 +103,9 @@ REST_FRAMEWORK = {
     
 }
 
+# Email Configrution
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -140,3 +143,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:9000",
 ]
+
+PASSWORD_RESET_TIMEOUT=600     # 600 Sec = 10 Min
