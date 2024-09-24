@@ -1,6 +1,9 @@
 import os
 from pathlib import Path
 from datetime import timedelta
+import dotenv
+dotenv.read_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -103,8 +106,6 @@ REST_FRAMEWORK = {
     )
     
 }
-import dotenv
-dotenv.read_dotenv()
 
 # Email Configrution
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -153,4 +154,4 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:9000",
 ]
 
-PASSWORD_RESET_TIMEOUT=600     # 600 Sec = 10 Min
+PASSWORD_RESET_TIMEOUT=300     # 300 Sec =  Min 5
